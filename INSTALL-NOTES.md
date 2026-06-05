@@ -87,6 +87,54 @@ go install ./cmd/bumblebee             # rebuild if source changed
 bumblebee scan --profile baseline --exposure-catalog ./threat_intel --findings-only
 ```
 
+## Daily automatic background scan — added 2026-06-05
+
+A macOS LaunchAgent runs a fast, targeted exposure scan once a day and
+shows a Notification Center alert **only if a match is found** (silent
+otherwise).
+
+**Components:**
+- `automation/daily-scan.sh` — the scan wrapper (in this repo). Runs a
+  `baseline` scan (global/user packages, browser extensions, MCP configs,
+  Homebrew, Go) **plus** a `project` scan of existing dev folders
+  (`~/code`, `~/local models`, ...). Deliberately does NOT crawl all of
+  `$HOME` — under launchd that has full-disk access and crawls
+  iCloud/Photos/caches, which ran >12 min and exceeded `--max-duration`.
+  Targeted scans finish in seconds.
+- `automation/love.bios.bumblebee.daily.plist` — copy of the LaunchAgent
+  (for version control). The live copy is installed at
+  `~/Library/LaunchAgents/love.bios.bumblebee.daily.plist` (outside git).
+- Private auto-updating catalog clone at
+  `~/.local/share/bumblebee-catalogs` (shallow clone of upstream). The
+  daily job `git pull`s it first so threat catalogs stay current without
+  touching this working fork.
+
+**Schedule:** daily at 12:00 local (`StartCalendarInterval`). If the Mac
+is asleep/off at that time, macOS runs it at next wake.
+
+**System changes outside git (logged per house rules), 2026-06-05:**
+```sh
+# private catalog clone
+git clone --depth 1 https://github.com/perplexityai/bumblebee.git ~/.local/share/bumblebee-catalogs
+
+# install + load the LaunchAgent
+cp automation/love.bios.bumblebee.daily.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
+```
+
+**Check / control the daily job:**
+```sh
+launchctl print gui/$(id -u)/love.bios.bumblebee.daily | grep -E 'state|runs|last exit'
+launchctl kickstart -k gui/$(id -u)/love.bios.bumblebee.daily   # run now
+tail "/Users/moritzcremer/local models/bumblebee-scan-results/daily/last-run.log"
+```
+
+**Disable the daily job:**
+```sh
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
+rm ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
+```
+
 ## Uninstall
 
 ```sh
