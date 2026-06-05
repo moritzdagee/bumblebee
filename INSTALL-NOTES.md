@@ -95,12 +95,14 @@ otherwise).
 
 **Components:**
 - `automation/daily-scan.sh` — the scan wrapper (in this repo). Runs a
-  `baseline` scan (global/user packages, browser extensions, MCP configs,
-  Homebrew, Go) **plus** a `project` scan of existing dev folders
-  (`~/code`, `~/local models`, ...). Deliberately does NOT crawl all of
-  `$HOME` — under launchd that has full-disk access and crawls
-  iCloud/Photos/caches, which ran >12 min and exceeded `--max-duration`.
-  Targeted scans finish in seconds.
+  `deep` scan of the **whole home folder** (`--root $HOME`) with an
+  `--exclude` deny-list for heavy, dependency-free trees: the Photos
+  library, `Caches`/`.cache`, app `Containers`/`Group Containers`,
+  `CoreSimulator`/`DerivedData`, `.Trash`, `MobileSync`. This replaced an
+  earlier whole-`$HOME` scan with no excludes (under launchd it crawled
+  the Photos library/iCloud and ran >12 min, exceeding `--max-duration`),
+  and an even earlier allow-list approach. Measured under launchd:
+  ~17 s, 461k files considered, completes without timing out.
 - `automation/love.bios.bumblebee.daily.plist` — copy of the LaunchAgent
   (for version control). The live copy is installed at
   `~/Library/LaunchAgents/love.bios.bumblebee.daily.plist` (outside git).
