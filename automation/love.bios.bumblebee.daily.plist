@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>love.bios.bumblebee.daily</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>/Users/moritzcremer/local models/bumblebee/automation/daily-scan.sh</string>
+    </array>
+
+    <!-- Run every day at 12:00 local. If the Mac is asleep/off, macOS runs it at next wake. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>12</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/moritzcremer/local models/bumblebee-scan-results/daily/launchagent.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/moritzcremer/local models/bumblebee-scan-results/daily/launchagent.err.log</string>
+</dict>
+</plist>
