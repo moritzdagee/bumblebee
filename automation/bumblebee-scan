@@ -11,7 +11,7 @@ set -uo pipefail
 BB="$HOME/go/bin/bumblebee"
 CAT="$HOME/.local/share/bumblebee-catalogs"      # private auto-updating catalog clone
 CATDIR="$CAT/threat_intel"
-RES="/Users/moritzcremer/local models/bumblebee-scan-results/daily"
+RES="/Users/moritzcremer/bumblebee-scan-results/daily"
 mkdir -p "$RES"
 TS="$(date +%Y%m%d-%H%M%S)"
 OUT="$RES/findings-$TS.ndjson"
