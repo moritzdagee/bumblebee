@@ -94,7 +94,7 @@ shows a Notification Center alert **only if a match is found** (silent
 otherwise).
 
 **Components:**
-- `automation/daily-scan.sh` — the scan wrapper (in this repo). Runs a
+- `automation/bumblebee-scan` — the scan wrapper (in this repo). Runs a
   `deep` scan of the **whole home folder** (`--root $HOME`) with an
   `--exclude` deny-list for heavy, dependency-free trees: the Photos
   library, `Caches`/`.cache`, app `Containers`/`Group Containers`,

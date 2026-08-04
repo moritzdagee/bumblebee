@@ -5,10 +5,21 @@
     <key>Label</key>
     <string>love.bios.bumblebee.daily</string>
 
+    <!-- Direkt das Skript statt "/bin/zsh <skript>" (2026-08-04): macOS listet
+         jeden Hintergrund-Dienst unter "Systemeinstellungen > Allgemein >
+         Anmeldeobjekte & Erweiterungen" nach dem PROGRAMM auf. Ueber /bin/zsh
+         aufgerufen hiess dieser Scan dort schlicht "zsh" und war nicht als
+         Sicherheits-Scan erkennbar. Das Skript traegt selbst die Startzeile
+         #!/bin/zsh und ist ausfuehrbar — es braucht den Interpreter davor nicht.
+         BEWUSST KEIN zusaetzlicher Wrapper: dieser Scan liest den GESAMTEN
+         Benutzer-Ordner. Ein zwischengeschaltetes Bash-Skript kann die
+         macOS-Berechtigung dafuer brechen (am selben Tag bei artefakte-sync in
+         assistant_dataflow reproduziert) — und ein Sicherheits-Scan, der wegen
+         fehlender Rechte nichts mehr sieht, meldet faelschlich "alles sauber".
+         Der Interpreter bleibt derselbe, nur der angezeigte Name aendert sich. -->
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/zsh</string>
-        <string>/Users/moritzcremer/bumblebee/automation/daily-scan.sh</string>
+        <string>/Users/moritzcremer/bumblebee/automation/bumblebee-scan</string>
     </array>
 
     <!-- Run every day at 12:00 local. If the Mac is asleep/off, macOS runs it at next wake. -->
