@@ -8,7 +8,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/zsh</string>
-        <string>/Users/moritzcremer/local models/bumblebee/automation/daily-scan.sh</string>
+        <string>/Users/moritzcremer/bumblebee/automation/daily-scan.sh</string>
     </array>
 
     <!-- Run every day at 12:00 local. If the Mac is asleep/off, macOS runs it at next wake. -->
@@ -24,8 +24,8 @@
     <false/>
 
     <key>StandardOutPath</key>
-    <string>/Users/moritzcremer/local models/bumblebee-scan-results/daily/launchagent.out.log</string>
+    <string>/Users/moritzcremer/bumblebee-scan-results/daily/launchagent.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/moritzcremer/local models/bumblebee-scan-results/daily/launchagent.err.log</string>
+    <string>/Users/moritzcremer/bumblebee-scan-results/daily/launchagent.err.log</string>
 </dict>
 </plist>

@@ -34,10 +34,10 @@ gh repo fork perplexityai/bumblebee --clone=false   # -> github.com/moritzdagee/
 
 # 3. Clone the fork into the working directory
 #    origin = moritzdagee/bumblebee, upstream = perplexityai/bumblebee
-gh repo clone moritzdagee/bumblebee "/Users/moritzcremer/local models/bumblebee"
+gh repo clone moritzdagee/bumblebee "/Users/moritzcremer/bumblebee"
 
 # 4. Build + install from the fork checkout
-cd "/Users/moritzcremer/local models/bumblebee"
+cd "/Users/moritzcremer/bumblebee"
 go build -o bumblebee ./cmd/bumblebee  # local binary in the checkout
 go install ./cmd/bumblebee             # -> /Users/moritzcremer/go/bin/bumblebee
 
@@ -76,12 +76,12 @@ node-ipc credential stealer, nx-console, laravel-lang, shopsprint typosquat).
 No exposure to any catalogued supply-chain compromise was found.
 
 Raw scan output (NDJSON) is **not** in this repo. It lives locally at:
-`/Users/moritzcremer/local models/bumblebee-scan-results/`
+`/Users/moritzcremer/bumblebee-scan-results/`
 
 ## Re-running a scan later
 
 ```sh
-cd "/Users/moritzcremer/local models/bumblebee"
+cd "/Users/moritzcremer/bumblebee"
 git pull upstream main                 # refresh threat catalogs from upstream
 go install ./cmd/bumblebee             # rebuild if source changed
 bumblebee scan --profile baseline --exposure-catalog ./threat_intel --findings-only
@@ -128,7 +128,7 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/love.bios.bumblebee.dail
 ```sh
 launchctl print gui/$(id -u)/love.bios.bumblebee.daily | grep -E 'state|runs|last exit'
 launchctl kickstart -k gui/$(id -u)/love.bios.bumblebee.daily   # run now
-tail "/Users/moritzcremer/local models/bumblebee-scan-results/daily/last-run.log"
+tail "/Users/moritzcremer/bumblebee-scan-results/daily/last-run.log"
 ```
 
 **Disable the daily job:**
@@ -142,5 +142,5 @@ rm ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
 ```sh
 rm /Users/moritzcremer/go/bin/bumblebee          # remove the command
 # remove the PATH line from ~/.zshrc (or restore the backup above)
-rm -rf "/Users/moritzcremer/local models/bumblebee"   # remove the source copy
+rm -rf "/Users/moritzcremer/bumblebee"   # remove the source copy
 ```
