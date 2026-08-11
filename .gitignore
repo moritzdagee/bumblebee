@@ -7,3 +7,9 @@
 
 # goreleaser output
 /dist/
+
+# Arbeitskopien (git worktree). ZWEI Ablagen, beide ignorieren:
+#   .claude/worktrees/ legt die Claude-Code-Oberflaeche selbst an
+#   worktrees/         entsteht von Hand nach ~/.claude/CLAUDE.md Regel 0d
+.claude/worktrees/
+worktrees/
