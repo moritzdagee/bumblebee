@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>love.bios.bumblebee.daily</string>
+    <string>claude.macbook.bumblebee.daily</string>
 
     <!-- Direkt das Skript statt "/bin/zsh <skript>" (2026-08-04): macOS listet
          jeden Hintergrund-Dienst unter "Systemeinstellungen > Allgemein >

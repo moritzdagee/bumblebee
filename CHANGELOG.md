@@ -1,3 +1,14 @@
+## 2026-08-31 Autostart-Name auf Suite-Namensschema umgestellt
+
+`love.bios.bumblebee.daily` heisst jetzt `claude.macbook.bumblebee.daily`
+(Suite-Regel 0i vom 2026-08-31: Name zeigt Autor, Ausfuehrungsort, Zweck).
+Nur das Etikett und der Plist-Dateiname wurden geaendert; das ausgefuehrte
+Programm (`automation/bumblebee-scan`) blieb identisch, erteilte
+macOS-Freigaben bleiben deshalb gueltig. Angepasst: INSTALL-NOTES.md,
+automation/bumblebee-scan, Plist umbenannt. Ausserhalb Git: Live-Plist in
+~/Library/LaunchAgents getauscht (bootout alt / bootstrap neu); Backup der
+alten Datei unter ~/.claude/backups/launchagents-vor-namensschema-2026-08-31/.
+
 ## 2026-08-11 Zweig-Aufraeumen nach Bestandsaufnahme (Protokoll)
 
 Anlass: Bestandsaufnahme vom 11.08. fand suite-weit rund 120 liegengebliebene
