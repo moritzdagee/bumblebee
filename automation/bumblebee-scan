@@ -4,7 +4,7 @@
 # the WHOLE home folder EXCEPT a deny-list of heavy, dependency-free trees
 # (Photos library, caches, app containers, Xcode build data, trash). Notifies
 # via macOS Notification Center ONLY if a match is found.
-# Triggered by the LaunchAgent love.bios.bumblebee.daily.
+# Triggered by the LaunchAgent claude.macbook.bumblebee.daily.
 
 set -uo pipefail
 

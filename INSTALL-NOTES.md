@@ -103,9 +103,9 @@ otherwise).
   the Photos library/iCloud and ran >12 min, exceeding `--max-duration`),
   and an even earlier allow-list approach. Measured under launchd:
   ~17 s, 461k files considered, completes without timing out.
-- `automation/love.bios.bumblebee.daily.plist` — copy of the LaunchAgent
+- `automation/claude.macbook.bumblebee.daily.plist` — copy of the LaunchAgent
   (for version control). The live copy is installed at
-  `~/Library/LaunchAgents/love.bios.bumblebee.daily.plist` (outside git).
+  `~/Library/LaunchAgents/claude.macbook.bumblebee.daily.plist` (outside git).
 - Private auto-updating catalog clone at
   `~/.local/share/bumblebee-catalogs` (shallow clone of upstream). The
   daily job `git pull`s it first so threat catalogs stay current without
@@ -120,21 +120,21 @@ is asleep/off at that time, macOS runs it at next wake.
 git clone --depth 1 https://github.com/perplexityai/bumblebee.git ~/.local/share/bumblebee-catalogs
 
 # install + load the LaunchAgent
-cp automation/love.bios.bumblebee.daily.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
+cp automation/claude.macbook.bumblebee.daily.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/claude.macbook.bumblebee.daily.plist
 ```
 
 **Check / control the daily job:**
 ```sh
-launchctl print gui/$(id -u)/love.bios.bumblebee.daily | grep -E 'state|runs|last exit'
-launchctl kickstart -k gui/$(id -u)/love.bios.bumblebee.daily   # run now
+launchctl print gui/$(id -u)/claude.macbook.bumblebee.daily | grep -E 'state|runs|last exit'
+launchctl kickstart -k gui/$(id -u)/claude.macbook.bumblebee.daily   # run now
 tail "/Users/moritzcremer/bumblebee-scan-results/daily/last-run.log"
 ```
 
 **Disable the daily job:**
 ```sh
-launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
-rm ~/Library/LaunchAgents/love.bios.bumblebee.daily.plist
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/claude.macbook.bumblebee.daily.plist
+rm ~/Library/LaunchAgents/claude.macbook.bumblebee.daily.plist
 ```
 
 ## Uninstall
