@@ -1,3 +1,23 @@
+## 2026-09-03 Ein Dateileser und ein package.json-Leser statt 15 Kopien
+
+Befund des Code-Reviews der ganzen Suite vom 2026-09-02 (Funde 21 und 26,
+Wiederverwendung).
+
+- `readBounded()` (oeffnen, Stat, nur regulaere Dateien, Groessengrenze,
+  ReadAll) lag byte-identisch in 13 Ecosystem-Paketen: mcp, editorext,
+  composer, pypi, gomod, npm, yarn, homebrew, bun, rubygems, skills, pnpm,
+  browserext. Eine Aenderung an der Groessen- oder Symlink-Regel haette an 13
+  Stellen synchron erfolgen muessen; ein vergessener Ort haette Scanner
+  uneinig gemacht, ohne dass ein Test es merkt. Jetzt `internal/fsread`
+  (`ReadBounded`, `Diag`); die 13 Methoden delegieren nur noch.
+- `loadDirectDeps()` (package.json, vier Dependency-Abschnitte) lag
+  wortgleich in yarn und bun. Jetzt `internal/npmproject` (`LoadDirectDeps`).
+
+Tests: neu `internal/fsread/fsread_test.go` (3) und
+`internal/npmproject/npmproject_test.go` (3), erst rot, dann gruen.
+`go build`, `go vet` und `go test ./...` (25 Pakete) gruen. Unbenutzte
+Importe per goimports entfernt.
+
 ## 2026-08-31 Autostart-Name auf Suite-Namensschema umgestellt
 
 `love.bios.bumblebee.daily` heisst jetzt `claude.macbook.bumblebee.daily`
