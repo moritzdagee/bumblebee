@@ -10,13 +10,11 @@ package yarn
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"io"
-	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/perplexityai/bumblebee/internal/fsread"
+	"github.com/perplexityai/bumblebee/internal/npmproject"
 
 	"github.com/perplexityai/bumblebee/internal/model"
 	"github.com/perplexityai/bumblebee/internal/normalize"
@@ -69,53 +67,9 @@ func (s *Scanner) ScanLockfile(path string, base model.Record) error {
 // Returns nil if the file is missing, unreadable, oversized, or unparseable —
 // callers should treat nil as "unknown" and leave DirectDependency absent.
 //
-// A non-nil diag is invoked for read or parse failures of a package.json
-// that exists; missing or non-regular files are silent (the common case is
-// a lockfile checked into a repo without a sibling package.json).
+// loadDirectDeps delegates to the shared npmproject reader.
 func loadDirectDeps(path string, maxSize int64, diag func(level, path, msg string)) map[string]bool {
-	info, err := os.Stat(path)
-	if err != nil || !info.Mode().IsRegular() {
-		return nil
-	}
-	if maxSize > 0 && info.Size() > maxSize {
-		if diag != nil {
-			diag("warn", path, "skipping direct-dependency resolution: package.json exceeds max file size")
-		}
-		return nil
-	}
-	data, err := os.ReadFile(path)
-	if err != nil {
-		if diag != nil {
-			diag("warn", path, "read package.json for direct-dependency resolution: "+err.Error())
-		}
-		return nil
-	}
-	var pj struct {
-		Dependencies         map[string]string `json:"dependencies"`
-		DevDependencies      map[string]string `json:"devDependencies"`
-		OptionalDependencies map[string]string `json:"optionalDependencies"`
-		PeerDependencies     map[string]string `json:"peerDependencies"`
-	}
-	if err := json.Unmarshal(data, &pj); err != nil {
-		if diag != nil {
-			diag("warn", path, "parse package.json for direct-dependency resolution: "+err.Error())
-		}
-		return nil
-	}
-	out := map[string]bool{}
-	for n := range pj.Dependencies {
-		out[n] = true
-	}
-	for n := range pj.DevDependencies {
-		out[n] = true
-	}
-	for n := range pj.OptionalDependencies {
-		out[n] = true
-	}
-	for n := range pj.PeerDependencies {
-		out[n] = true
-	}
-	return out
+	return npmproject.LoadDirectDeps(path, maxSize, diag)
 }
 
 type yarnEntry struct {
@@ -244,23 +198,5 @@ func unquote(s string) string {
 }
 
 func (s *Scanner) readBounded(path string) ([]byte, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	info, err := f.Stat()
-	if err != nil {
-		return nil, err
-	}
-	if !info.Mode().IsRegular() {
-		return nil, errors.New("not a regular file")
-	}
-	if s.MaxFileSize > 0 && info.Size() > s.MaxFileSize {
-		if s.Diag != nil {
-			s.Diag("warn", path, fmt.Sprintf("skipping: size %d exceeds max %d", info.Size(), s.MaxFileSize))
-		}
-		return nil, fmt.Errorf("file %s exceeds max size %d", path, s.MaxFileSize)
-	}
-	return io.ReadAll(f)
+	return fsread.ReadBounded(path, s.MaxFileSize, fsread.Diag(s.Diag))
 }
