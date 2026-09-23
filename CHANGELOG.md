@@ -1,3 +1,34 @@
+## 2026-09-23 Scanner neu installiert (Stand 329b871), Katalog auf 0.2.0 umgeschaltet
+
+Installation ausserhalb von Git, 2026-09-23 12:47:59 -03 (MacBook):
+
+```sh
+# Backup des alten Scanners (v0.1.2-0.20260602133442-156df7a272c9,
+# sha256 03183e328e8596dac326c8188b8a3b34c2287f8ef64b712519f33ace1c17085f)
+mkdir -p ~/.claude/backups/bumblebee-binary-vor-upstream-sync-2026-09-23
+cp -p ~/go/bin/bumblebee ~/.claude/backups/bumblebee-binary-vor-upstream-sync-2026-09-23/bumblebee
+# Neubau aus dem gemergten Hauptstand (PR #12)
+cd ~/bumblebee && go install ./cmd/bumblebee
+```
+
+- Ziel: `~/go/bin/bumblebee` (von `automation/bumblebee-scan` als `$BB`
+  benutzt; der Autostart `claude.macbook.bumblebee.daily` startet das Skript
+  direkt aus `~/bumblebee/automation/`, an ihm wurde nichts geaendert).
+- Neu: `v0.1.2-0.20260923154611-329b871c385e`, sha256
+  `f69f23b7ac16de6248f349f4191cea400eef5218eaabf5f4f9bf6fc6df1fba01`,
+  `bumblebee selftest` OK.
+- Zurueck: Backup-Datei nach `~/go/bin/bumblebee` kopieren.
+
+Probelauf 2026-09-23 12:48 -03: `BUMBLEBEE_WA=<Ersatzprogramm, das nur
+mitschreibt> ~/bumblebee/automation/bumblebee-scan` (kein launchd, keine
+echte Nachricht; das Ersatzprogramm wurde nicht aufgerufen, weil nichts zu
+melden war). Ergebnis in `last-run.log`:
+`findings=0 files=757659 duration_ms=10755 catalog=updated:8ef7fbc catalog_date=2026-09-23`.
+Der private Katalog-Klon steht damit auf Upstream `8ef7fbc`: 13 Kataloge,
+alle Schema 0.2.0, 1101 Eintraege (vorher 9 Kataloge, Schema 0.1.0, 686
+Eintraege). Das Aufraeumen aus PR #11 hat gegriffen: 30 statt 121
+findings-Dateien.
+
 ## 2026-09-23 Originalprojekt zusammengefuehrt: Scanner liest Katalog-Schema 0.2.0
 
 Der installierte Scanner (Stand 2026-06-02, Upstream-Commit 156df7a) kennt nur
