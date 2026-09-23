@@ -31,11 +31,48 @@ EX_ARGS=()
 for e in "${EXCLUDES[@]}"; do EX_ARGS+=(--exclude "$e"); done
 
 # 1. Refresh the private threat catalogs (best-effort; offline is fine).
-git -C "$CAT" pull --quiet --depth 1 2>/dev/null || true
+# Fix 2026-09-23: this used to be `git pull --depth 1 ... || true`. On a
+# shallow clone every new upstream commit has no common ancestor with the old
+# one, so the pull stopped with "divergent branches" on every run and the
+# catalog stayed frozen at 2026-06-02, silently. Now: fetch the newest commit,
+# check that the installed scanner can actually read it (upstream moved to
+# catalog schema 0.2.0, which older scanner builds reject and then scan
+# NOTHING), and only then switch over. Every outcome is written to last-run.log.
+CATNOTE="catalog=unchanged"
+if git -C "$CAT" fetch --quiet --depth 1 origin main 2>/dev/null; then
+  NEW="$(git -C "$CAT" rev-parse FETCH_HEAD)"
+  CUR="$(git -C "$CAT" rev-parse HEAD)"
+  if [ "$NEW" != "$CUR" ]; then
+    PROBE="$(mktemp -d)"
+    mkdir -p "$PROBE/root"
+    git -C "$CAT" archive "$NEW" threat_intel | tar -x -C "$PROBE"
+    if "$BB" scan --profile deep --root "$PROBE/root" --exposure-catalog "$PROBE/threat_intel" \
+         --findings-only > /dev/null 2> "$PROBE/err"; then
+      git -C "$CAT" reset --quiet --hard "$NEW"
+      CATNOTE="catalog=updated:${NEW:0:7}"
+    else
+      CATNOTE="catalog=NOT-UPDATED(scanner-too-old:$(head -c 160 "$PROBE/err" | tr '\n' ' '))"
+    fi
+    rm -rf "$PROBE"
+  fi
+else
+  CATNOTE="catalog=fetch-failed(offline?)"
+fi
+CATDATE="$(git -C "$CAT" log -1 --format=%cs 2>/dev/null)"
 
 # 2. Deep, read-only exposure scan of the whole home folder minus the deny-list.
 "$BB" scan --profile deep --root "$HOME" --exposure-catalog "$CATDIR" \
-  --findings-only "${EX_ARGS[@]}" --max-duration 15m > "$OUT" 2> "$DIAG" || true
+  --findings-only "${EX_ARGS[@]}" --max-duration 15m > "$OUT" 2> "$DIAG"
+RC=$?
+
+# 2b. A scan that did not finish writes no scan_summary. Before 2026-09-23 the
+# exit code was thrown away with `|| true`, so a broken scan counted as
+# "0 findings" and looked exactly like a clean week. Now it is logged as a
+# failure and the script exits non-zero (visible in `launchctl list`).
+if ! grep -q '"record_type":"scan_summary"' "$OUT" 2>/dev/null; then
+  echo "$(date '+%Y-%m-%d %H:%M:%S')  SCAN-FEHLGESCHLAGEN exit=$RC  $CATNOTE  catalog_date=${CATDATE:-?}  error=$(grep -v '^{' "$DIAG" | head -c 200 | tr '\n' ' ')" >> "$LASTLOG"
+  exit 1
+fi
 
 # 3. Count real matches (finding records only).
 N="$(grep -c '"record_type":"finding"' "$OUT" 2>/dev/null | tr -dc '0-9')"; [ -z "$N" ] && N=0
@@ -44,7 +81,7 @@ N="$(grep -c '"record_type":"finding"' "$OUT" 2>/dev/null | tr -dc '0-9')"; [ -z
 SUMMARY="$(grep '"record_type":"scan_summary"' "$OUT" 2>/dev/null | tail -1)"
 FILES="$(printf '%s' "$SUMMARY" | sed -n 's/.*"files_considered":\([0-9]*\).*/\1/p')"
 DUR="$(printf '%s' "$SUMMARY" | sed -n 's/.*"duration_ms":\([0-9]*\).*/\1/p')"
-echo "$(date '+%Y-%m-%d %H:%M:%S')  findings=$N  files=${FILES:-?}  duration_ms=${DUR:-?}" >> "$LASTLOG"
+echo "$(date '+%Y-%m-%d %H:%M:%S')  findings=$N  files=${FILES:-?}  duration_ms=${DUR:-?}  $CATNOTE  catalog_date=${CATDATE:-?}" >> "$LASTLOG"
 
 # 4. Alert only if something was found.
 if [ "$N" -gt 0 ]; then
