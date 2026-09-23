@@ -1,3 +1,29 @@
+## 2026-09-23 Automatische Tests fuer Vorschlaege (tests.yml) und Aufraeum-Fehler im Tages-Scan
+
+- Neu: `.github/workflows/tests.yml`. Laeuft nur bei Pull Requests, nicht bei
+  reinen Doku-Aenderungen (`**.md`, `docs/**`, `archive/**`). Ein neuer Push
+  bricht den laufenden Lauf ab (concurrency), Zeitlimit 15 Minuten. Go-Version
+  aus `go.mod`, mit Zwischenspeicher. Schritte: `go vet ./...`, `go test ./...`
+  und `shellcheck --shell=bash` fuer die Shell-Skripte unter `automation/`
+  (shellcheck kennt kein zsh, deshalb bash-Modus).
+- `ci.yml` des Originalprojekts bleibt unveraendert und laeuft bei PRs
+  ebenfalls (Linux und macOS, gofmt, Race-Test, Selbsttest, govulncheck). Es
+  deckt go vet/test schon ab, hat aber keine Pfad-Ausnahmen, keinen
+  Abbruch alter Laeufe und kein shellcheck; darum die zusaetzliche Datei statt
+  einer Aenderung an `ci.yml` (haelt Upstream-Zusammenfuehrungen konfliktfrei).
+- Kein Test musste uebersprungen werden: `go test ./...` braucht weder Netz
+  noch macOS.
+- Fund von shellcheck, behoben: Schritt 5 von `automation/bumblebee-scan`
+  sollte nur die 30 neuesten Ergebnis- und Diagnose-Dateien behalten, benutzte
+  aber `ls -1t "$RES"/$pat`. zsh expandiert ein Muster in einer Variablen
+  nicht, `ls` bekam das woertliche Muster, scheiterte still, und es wurde nie
+  etwas geloescht (121 findings-Dateien lagen in
+  `~/bumblebee-scan-results/daily/`). Jetzt `find ... -name "$pat" | sort -r`,
+  die Dateinamen tragen einen Zeitstempel. Beim naechsten Lauf werden die
+  aelteren Dateien ueber 30 hinaus entfernt, wie urspruenglich vorgesehen.
+  Getestet in einer Sandbox mit je 40 Dateien: es bleiben die 30 neuesten.
+- README: Abschnitt "Automatische Tests (moritzdagee-Fork)" am Ende.
+
 ## 2026-09-23 Treffer-Meldung ueber WhatsApp statt Mac-Mitteilung
 
 Befund der Fehler-Durchsicht vom 2026-09-23. `automation/bumblebee-scan`

@@ -290,3 +290,12 @@ catalog list and review guidance.
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE).
+
+## Automatische Tests (moritzdagee-Fork)
+
+Jeder Vorschlag (Pull Request) an diesen Fork startet den Lauf
+`.github/workflows/tests.yml`: `go vet ./...`, `go test ./...` und `shellcheck`
+fuer die eigenen Skripte unter `automation/`. Reine Doku-Aenderungen (`*.md`,
+`docs/`, `archive/`) loesen keinen Lauf aus. Daneben laeuft weiterhin
+`ci.yml` aus dem Originalprojekt (Linux und macOS, gofmt, Race-Test,
+Selbsttest, govulncheck). Gemerged wird erst, wenn beide gruen sind.
