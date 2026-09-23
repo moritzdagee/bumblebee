@@ -1,3 +1,25 @@
+## 2026-09-23 Treffer-Meldung ueber WhatsApp statt Mac-Mitteilung
+
+Befund der Fehler-Durchsicht vom 2026-09-23. `automation/bumblebee-scan`
+meldete Treffer per `osascript display notification`, also ueber die
+Mac-Mitteilungszentrale. Das verstoesst gegen Suite-Regel 0e (seit 2026-08-03:
+keine Mac-Mitteilungen, einziger Push-Kanal ist die WhatsApp-Gruppe
+"Moritz und Ted"); die Umstellung des Mac-Checkups galt als letzte, dieser
+Sender war uebersehen.
+
+- Neu: Funktion `melden()` ruft `~/assistant_dataflow/scripts/wa send
+  "Moritz und Ted" <text> --ja` mit `/usr/bin/python3` auf. Gemeldet wird bei
+  Treffern und (neu) bei abgebrochenem Scan. Kein Ausweichen auf andere
+  Kanaele; scheitert die Zustellung, steht `WHATSAPP-ZUSTELLUNG-FEHLGESCHLAGEN`
+  mit dem Text in `last-run.log`.
+- Fuer Tests laesst sich das Sende-Programm ueber `BUMBLEBEE_WA` ersetzen.
+- INSTALL-NOTES.md angepasst.
+
+Test: Sandbox-Kopie mit abgebrochenem Scan und Ersatz-Sendeprogramm: Aufruf
+`send "Moritz und Ted" "<text>" --ja` kommt an; mit scheiterndem
+Ersatz-Sendeprogramm steht die Fehlzustellung in `last-run.log`. Es wurde
+dabei keine echte Nachricht gesendet.
+
 ## 2026-09-23 Taeglicher Scan: Katalog-Aktualisierung und Fehler nicht mehr still
 
 Befund der Fehler-Durchsicht vom 2026-09-23.
