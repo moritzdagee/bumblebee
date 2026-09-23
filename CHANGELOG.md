@@ -1,3 +1,32 @@
+## 2026-09-23 Originalprojekt zusammengefuehrt: Scanner liest Katalog-Schema 0.2.0
+
+Der installierte Scanner (Stand 2026-06-02, Upstream-Commit 156df7a) kennt nur
+Katalog-Schema 0.1.0. Upstream hat alle Kataloge auf 0.2.0 gehoben, deshalb
+meldete der Tages-Scan seit dem Katalog-Fix `catalog=NOT-UPDATED(scanner-too-old
+...)` und die Bedrohungsliste blieb beim Stand 2026-06-02.
+
+- Zusammengefuehrt: `perplexityai/bumblebee` main bis `d76e369` (8 Commits:
+  Schema 0.2.0 mit any-version-Eintraegen `"*"`, Kataloge GlassWorm, Mastra,
+  Mini Shai-Hulud LeoPlatform, schnelleres Verzeichnis-Durchlaufen, neuer
+  Release-Ablauf in `release.yml`).
+- Konflikte: keine. Upstream beruehrt `internal/exposure`, `internal/osv`,
+  `internal/walk`, `internal/scanner`, `threat_intel/`, `docs/schema/v0.2.0`,
+  README, CONTRIBUTING, `release.yml`; die eigenen Anpassungen liegen in
+  `automation/`, `internal/fsread`, `internal/npmproject`, den 13
+  Ecosystem-Paketen (Delegation an fsread), `tests.yml`, CHANGELOG und
+  INSTALL-NOTES. Git hat README automatisch zusammengefuehrt; der Abschnitt
+  "Automatische Tests" ist erhalten.
+- Eigene Logik geprueft und unveraendert: WhatsApp-Meldung (`melden()`),
+  Katalog-Probe vor dem Umschalten, `SCAN-FEHLGESCHLAGEN`-Meldung.
+- Probe wie im Tages-Skript (leerer Ordner gegen die Upstream-Kataloge): neuer
+  Scanner `status":"complete"`, Exit 0; alter Scanner `unsupported exposure
+  catalog schema_version "0.2.0"`. Die Katalog-Probe wird mit dem neuen
+  Scanner also umschalten.
+- `go build ./...`, `go vet ./...`, `go test ./...` gruen, `gofmt -l .` leer,
+  `bumblebee selftest` OK.
+- `release.yml` von Upstream laeuft nur bei Tags `v*` oder manuell, nicht bei
+  Pull Requests oder Pushes auf main.
+
 ## 2026-09-23 Automatische Tests fuer Vorschlaege (tests.yml) und Aufraeum-Fehler im Tages-Scan
 
 - Neu: `.github/workflows/tests.yml`. Laeuft nur bei Pull Requests, nicht bei
