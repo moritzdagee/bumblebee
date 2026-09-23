@@ -90,7 +90,8 @@ bumblebee scan --profile baseline --exposure-catalog ./threat_intel --findings-o
 ## Daily automatic background scan — added 2026-06-05
 
 A macOS LaunchAgent runs a fast, targeted exposure scan once a day and
-shows a Notification Center alert **only if a match is found** (silent
+sends a WhatsApp message to the group "Moritz und Ted" **only if a match is
+found or the scan itself failed** (silent
 otherwise).
 
 **Components:**

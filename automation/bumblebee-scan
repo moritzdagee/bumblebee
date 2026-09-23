@@ -2,8 +2,10 @@
 # Bumblebee daily background scan — installed 2026-06-05, rev3.
 # Read-only. Refreshes its own private threat-catalog copy first, then scans
 # the WHOLE home folder EXCEPT a deny-list of heavy, dependency-free trees
-# (Photos library, caches, app containers, Xcode build data, trash). Notifies
-# via macOS Notification Center ONLY if a match is found.
+# (Photos library, caches, app containers, Xcode build data, trash). Reports
+# to the WhatsApp group "Moritz und Ted" ONLY if a match is found or the scan
+# itself failed (Suite rule 0e: no Mac notifications, WhatsApp is the only
+# push channel). If WhatsApp is unreachable, that is written to last-run.log.
 # Triggered by the LaunchAgent claude.macbook.bumblebee.daily.
 
 set -uo pipefail
@@ -17,6 +19,15 @@ TS="$(date +%Y%m%d-%H%M%S)"
 OUT="$RES/findings-$TS.ndjson"
 DIAG="$RES/diag-$TS.ndjson"
 LASTLOG="$RES/last-run.log"
+WA="${BUMBLEBEE_WA:-$HOME/assistant_dataflow/scripts/wa}"
+
+# Push a message to the WhatsApp group "Moritz und Ted". Never falls back to
+# another channel; a failed delivery is recorded in last-run.log instead.
+melden() {
+  if ! /usr/bin/python3 "$WA" send "Moritz und Ted" "$1" --ja >/dev/null 2>&1; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S')  WHATSAPP-ZUSTELLUNG-FEHLGESCHLAGEN  text=$1" >> "$LASTLOG"
+  fi
+}
 
 # Heavy, dependency-free directory names to skip (matched by name or suffix).
 EXCLUDES=(
@@ -71,6 +82,7 @@ RC=$?
 # failure and the script exits non-zero (visible in `launchctl list`).
 if ! grep -q '"record_type":"scan_summary"' "$OUT" 2>/dev/null; then
   echo "$(date '+%Y-%m-%d %H:%M:%S')  SCAN-FEHLGESCHLAGEN exit=$RC  $CATNOTE  catalog_date=${CATDATE:-?}  error=$(grep -v '^{' "$DIAG" | head -c 200 | tr '\n' ' ')" >> "$LASTLOG"
+  melden "Bumblebee (Lieferketten-Scan auf dem MacBook): der taegliche Scan ist heute abgebrochen, es wurde also NICHTS geprueft. Details: $LASTLOG"
   exit 1
 fi
 
@@ -85,7 +97,7 @@ echo "$(date '+%Y-%m-%d %H:%M:%S')  findings=$N  files=${FILES:-?}  duration_ms=
 
 # 4. Alert only if something was found.
 if [ "$N" -gt 0 ]; then
-  /usr/bin/osascript -e "display notification \"$N supply-chain match(es) found. See $RES\" with title \"⚠️ Bumblebee found something\" sound name \"Basso\""
+  melden "Bumblebee (Lieferketten-Scan auf dem MacBook): $N Treffer gegen bekannte verseuchte Pakete gefunden. Ergebnisdatei: $OUT"
 fi
 
 # 5. Keep only the 30 most recent files of each kind.
