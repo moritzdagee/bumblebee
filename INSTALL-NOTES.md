@@ -19,7 +19,9 @@ calls.
 - Upstream: `perplexityai/bumblebee` (Apache-2.0)
 - This fork: `moritzdagee/bumblebee` (your own copy)
 - Language: Go (built with go1.26.4; tool requires Go 1.25+)
-- Installed binary version: `v0.1.2-0.20260602133442-156df7a272c9`
+- Installed binary version: `v0.1.2-0.20260923154611-329b871c385e`
+  (reinstalled 2026-09-23 after the upstream sync, see CHANGELOG; first
+  install 2026-06-05 was `v0.1.2-0.20260602133442-156df7a272c9`)
 
 ## Install steps performed — 2026-06-05
 
@@ -82,7 +84,8 @@ Raw scan output (NDJSON) is **not** in this repo. It lives locally at:
 
 ```sh
 cd "/Users/moritzcremer/bumblebee"
-git pull upstream main                 # refresh threat catalogs from upstream
+# Scanner updates: merge upstream/main into a branch of origin/main via PR
+# (never directly on main), then from the merged main:
 go install ./cmd/bumblebee             # rebuild if source changed
 bumblebee scan --profile baseline --exposure-catalog ./threat_intel --findings-only
 ```
