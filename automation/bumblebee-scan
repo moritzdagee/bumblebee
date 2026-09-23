@@ -101,7 +101,11 @@ if [ "$N" -gt 0 ]; then
 fi
 
 # 5. Keep only the 30 most recent files of each kind.
+# Fix 2026-09-23: this used `ls -1t "$RES"/$pat`. zsh does not expand a glob
+# stored in a variable, so ls got the literal pattern, failed silently, and
+# nothing was ever pruned (121 findings files had piled up). File names carry
+# a YYYYmmdd-HHMMSS stamp, so reverse name order is newest first.
 for pat in 'findings-*.ndjson' 'diag-*.ndjson'; do
-  ls -1t "$RES"/$pat 2>/dev/null | tail -n +31 | while read -r f; do rm -f "$f"; done
+  find "$RES" -maxdepth 1 -type f -name "$pat" | sort -r | tail -n +31 | while IFS= read -r f; do rm -f "$f"; done
 done
 exit 0
