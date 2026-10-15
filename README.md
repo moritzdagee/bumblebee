@@ -299,3 +299,19 @@ fuer die eigenen Skripte unter `automation/`. Reine Doku-Aenderungen (`*.md`,
 `docs/`, `archive/`) loesen keinen Lauf aus. Daneben laeuft weiterhin
 `ci.yml` aus dem Originalprojekt (Linux und macOS, gofmt, Race-Test,
 Selbsttest, govulncheck). Gemerged wird erst, wenn beide gruen sind.
+
+Lokal (GitHub-Testlaeufe sind in Moritz' privaten Projekten seit 25.09.2026
+abgeschaltet, Tests laufen deshalb vor dem Zusammenfuehren auf dem Mac):
+
+```sh
+cd ~/bumblebee
+go test ./...
+```
+
+Seit 15.10.2026 gehoert dazu `automation/bumblebee_scan_test.go`: er prueft
+das fork-eigene Tagesskript `automation/bumblebee-scan` mit einem
+Ersatz-Scanner, einem Ersatz-Melder und Wegwerf-Ordnern (Zaehlen der Treffer,
+Abbruch gilt als Fehler, Katalog-Wechsel nur wenn der Scanner ihn lesen kann,
+Aufraeumen auf 30 Dateien). Dafuer liest das Skript optional
+`BUMBLEBEE_BIN`, `BUMBLEBEE_CATALOGS` und `BUMBLEBEE_RESULTS`; der Autostart
+setzt keine davon, im Alltag gelten die bisherigen Pfade.

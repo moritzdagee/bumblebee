@@ -1,3 +1,20 @@
+## 2026-10-15 Tests fuer das fork-eigene Tagesskript automation/bumblebee-scan
+
+- Pruefung: `go test ./...` laeuft gruen (26 Pakete, rund 8 s, Go 1.26.4, macOS).
+- Eigene Teile des Forks laut `git log --author=moritzdagee`: das Tagesskript
+  `automation/bumblebee-scan` (PRs #2, #3, #4, #9, #10, #11) hatte keine Tests; die
+  Go-Pakete `internal/fsread` und `internal/npmproject` aus PR #8 haben bereits welche.
+  Alle uebrigen Go-Dateien stammen aus dem Originalprojekt (perplexityai/bumblebee) und
+  sind dort getestet.
+- Neu: `automation/bumblebee_scan_test.go`, 9 Tests. Ersatz-Scanner (Shell-Skript mit
+  vorgegebener Ausgabe), Ersatz-Melder statt `wa`, Wegwerf-Ordner, Katalog-Quelle ist ein
+  lokales Git-Verzeichnis ueber file://. Kein echter Scan, keine Nachricht, kein Netz.
+  Unter Linux werden die Tests uebersprungen (Skript braucht zsh und /usr/bin/python3).
+- Skript: drei optionale Ueberschreibungen `BUMBLEBEE_BIN`, `BUMBLEBEE_CATALOGS`,
+  `BUMBLEBEE_RESULTS` mit den bisherigen Pfaden als Vorgabe. Der Autostart
+  `claude.macbook.bumblebee.daily` setzt keine davon, Verhalten unveraendert.
+- Befehl: `cd ~/bumblebee && go test ./...`
+
 ## 2026-09-23 Scanner neu installiert (Stand 329b871), Katalog auf 0.2.0 umgeschaltet
 
 Installation ausserhalb von Git, 2026-09-23 12:47:59 -03 (MacBook):
