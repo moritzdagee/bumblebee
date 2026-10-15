@@ -1,3 +1,20 @@
+## 2026-10-15 Go 1.26 statt 1.25: GitHub-Pruefung govulncheck wieder gruen
+
+- Anlass: zwei Fehler-Mails von GitHub zu den Laeufen `ci` vom 15.10.2026 (Vorschlag #14
+  und Hauptstand). Nicht der Tages-Scan war kaputt (letzte-run.log: taeglich findings=0,
+  Scan vollstaendig), sondern der Pruefschritt `govulncheck`: 9 Luecken in der
+  Go-Standardbibliothek von go1.25.14, behoben erst in go1.26.9. Go 1.25 bekommt die
+  Korrekturen nicht mehr.
+- Aenderung: `go-version: "1.26"` in `.github/workflows/ci.yml` (zweimal) und
+  `release.yml`, `go 1.26` in `go.mod` (tests.yml liest die Version von dort).
+- Ausserhalb von Git, 2026-10-15 ~11:40 -03 (MacBook): `brew upgrade go` (1.26.4 auf
+  1.27.2), `go install golang.org/x/vuln/cmd/govulncheck@v1.3.0`, Scanner neu gebaut
+  (`go install ./cmd/bumblebee` aus dem Hauptstand nach dem Zusammenfuehren).
+- Pruefung lokal: `govulncheck ./...` meldet "No vulnerabilities found", `go vet` und
+  `go test ./...` gruen.
+- Damit das kuenftig vor der GitHub-Mail auffaellt, nimmt die Routine tests-taeglich
+  (vibe-suite) `govulncheck` in den Testbefehl von bumblebee auf.
+
 ## 2026-10-15 Tests fuer das fork-eigene Tagesskript automation/bumblebee-scan
 
 - Pruefung: `go test ./...` laeuft gruen (26 Pakete, rund 8 s, Go 1.26.4, macOS).
