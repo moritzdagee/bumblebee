@@ -291,7 +291,7 @@
     {
       "id": "mini-shai-hulud-leoplatform-2026-06-24-go-github-com-verana-labs-verana-blockchain",
       "name": "github.com/verana-labs/verana-blockchain (Mini Shai-Hulud / Miasma LeoPlatform compromise)",
-      "ecosystem": ".go",
+      "ecosystem": "go",
       "package": "github.com/verana-labs/verana-blockchain",
       "versions": [
         "v0.10.1-dev.20"

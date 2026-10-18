@@ -5,7 +5,7 @@
 // requirements are also recorded (lower-confidence: they may not all end up
 // in the final build set).
 //
-// No `.go` commands are executed. Dispatch is filename-based, so any
+// No `go` commands are executed. Dispatch is filename-based, so any
 // `go.sum` / `go.mod` reachable from a configured root is parsed —
 // including files inside the per-user module cache (`~/.go/pkg/mod`)
 // when `~/.go` is a baseline root. The cache's source-file subtrees
@@ -67,7 +67,7 @@ func (s *Scanner) ScanGoSum(path string, base model.Record) error {
 		r.NormalizedName = strings.ToLower(module)
 		r.Version = version
 		r.ProjectPath = projectPath
-		r.PackageManager = ".go"
+		r.PackageManager = "go"
 		r.SourceType = "go-sum"
 		r.SourceFile = path
 		r.Confidence = "high"
@@ -93,7 +93,7 @@ func (s *Scanner) ScanGoMod(path string, base model.Record) error {
 		rec.NormalizedName = strings.ToLower(r.module)
 		rec.Version = r.version
 		rec.ProjectPath = projectPath
-		rec.PackageManager = ".go"
+		rec.PackageManager = "go"
 		rec.SourceType = "go-mod"
 		rec.SourceFile = path
 		if r.indirect {

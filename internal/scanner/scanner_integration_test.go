@@ -221,7 +221,7 @@ PLATFORMS
 			t.Errorf("missing source_type %q", st)
 		}
 	}
-	wantEcosystems := []string{"npm", ".go", "rubygems", "packagist", "mcp", "editor-extension", "browser-extension", "homebrew", "agent-skill"}
+	wantEcosystems := []string{"npm", "go", "rubygems", "packagist", "mcp", "editor-extension", "browser-extension", "homebrew", "agent-skill"}
 	for _, e := range wantEcosystems {
 		if !gotEcosystem[e] {
 			t.Errorf("missing ecosystem %q", e)
@@ -362,7 +362,7 @@ require github.com/example/foo v1.2.3
 	if bytes.Contains(stdout.Bytes(), []byte(`"ecosystem":"npm"`)) {
 		t.Fatalf("npm record emitted despite go-only filter: %s", stdout.String())
 	}
-	if !bytes.Contains(stdout.Bytes(), []byte(`"ecosystem":".go"`)) {
+	if !bytes.Contains(stdout.Bytes(), []byte(`"ecosystem":"go"`)) {
 		t.Fatalf("go record missing under go-only filter: %s", stdout.String())
 	}
 }

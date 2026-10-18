@@ -8,7 +8,7 @@ by recent supply-chain incidents — see the [Why these ecosystems](#why-these-e
 section at the bottom for the reporting that informed it.
 
 The `ecosystem` field on every record matches OSV ecosystem identifiers
-where one exists (`npm`, `pypi`, `.go`, `rubygems`, `packagist`, ...). `mcp`,
+where one exists (`npm`, `pypi`, `go`, `rubygems`, `packagist`, ...). `mcp`,
 `agent-skill`, and `editor-extension` are project-local values for
 execution surfaces that do not map cleanly to a package registry; all
 three are emitted without resolved package versions.
