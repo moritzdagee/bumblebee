@@ -1120,7 +1120,7 @@ func TestScanConfig_NonPackageSpecsDoNotRoundTrip(t *testing.T) {
 func TestLooksUnresolvedShellVar(t *testing.T) {
 	yes := []string{
 		"${CLAUDE_PLUGIN_ROOT}/foo",
-		"$HOME/.local/bin/x",
+		"$HOME/bin/x",
 		"%APPDATA%\\Claude\\thing",
 	}
 	no := []string{

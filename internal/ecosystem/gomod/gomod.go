@@ -7,8 +7,8 @@
 //
 // No `go` commands are executed. Dispatch is filename-based, so any
 // `go.sum` / `go.mod` reachable from a configured root is parsed —
-// including files inside the per-user module cache (`~/.go/pkg/mod`)
-// when `~/.go` is a baseline root. The cache's source-file subtrees
+// including files inside the per-user module cache (`~/go/pkg/mod`)
+// when `~/go` is a baseline root. The cache's source-file subtrees
 // are not walked for anything beyond those two filenames.
 package gomod
 

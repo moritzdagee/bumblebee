@@ -200,7 +200,7 @@ func TestResolveRootsBaselineIncludesClaudeAndCodexMCPRoots(t *testing.T) {
 // TestResolveRootsBaselineSkipsAbsentClaudeCodexRoots verifies absent
 // candidates are dropped by filterExistingRoots rather than emitted.
 //
-// We create an unrelated default root (`~/.go`) so resolveRoots has at
+// We create an unrelated default root (`~/go`) so resolveRoots has at
 // least one survivor and returns a non-empty root list — the assertion
 // we actually want to make is "absent Claude/Codex dirs do NOT appear"
 // and short-circuiting on an empty-defaults error would let regressions
@@ -212,7 +212,7 @@ func TestResolveRootsBaselineSkipsAbsentClaudeCodexRoots(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
 	// Provide one unrelated default so the baseline run does not fail
-	// with "no default roots". `~/.go` is not one of the MCP candidates
+	// with "no default roots". `~/go` is not one of the MCP candidates
 	// under test, so its presence cannot mask the assertion below.
 	if err := os.MkdirAll(filepath.Join(home, "go"), 0o755); err != nil {
 		t.Fatal(err)
