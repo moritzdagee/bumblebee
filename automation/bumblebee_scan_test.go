@@ -110,8 +110,8 @@ func newEnv(t *testing.T) *env {
 		waLog:   filepath.Join(base, "wa.log"),
 		bbLog:   filepath.Join(base, "bb.log"),
 	}
-	bb := filepath.Join(base, "bin", "bumblebee")
-	wa := filepath.Join(base, "bin", "wa")
+	bb := filepath.Join(base, ".local/bin", "bumblebee")
+	wa := filepath.Join(base, ".local/bin", "wa")
 	write(t, bb, fakeScanner, 0o755)
 	write(t, wa, fakeWA, 0o644)
 	if err := os.MkdirAll(e.home, 0o755); err != nil {

@@ -12,10 +12,10 @@ set -uo pipefail
 
 # The BUMBLEBEE_* overrides exist for automation/bumblebee_scan_test.go only
 # (fake scanner, temp folders). launchd sets none of them, so the defaults apply.
-BB="${BUMBLEBEE_BIN:-$HOME/go/bin/bumblebee}"
+BB="${BUMBLEBEE_BIN:-$HOME/.go/bin/bumblebee}"
 CAT="${BUMBLEBEE_CATALOGS:-$HOME/.local/share/bumblebee-catalogs}"      # private auto-updating catalog clone
 CATDIR="$CAT/threat_intel"
-RES="${BUMBLEBEE_RESULTS:-/Users/moritzcremer/bumblebee-scan-results/daily}"
+RES="${BUMBLEBEE_RESULTS:-/Users/moritzcremer/.vibe-suite/bumblebee-scan-results/daily}"
 mkdir -p "$RES"
 TS="$(date +%Y%m%d-%H%M%S)"
 OUT="$RES/findings-$TS.ndjson"

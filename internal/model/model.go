@@ -37,7 +37,7 @@ const (
 const (
 	EcosystemNPM              = "npm"
 	EcosystemPyPI             = "pypi"
-	EcosystemGo               = "go"
+	EcosystemGo               = ".go"
 	EcosystemRubyGems         = "rubygems"
 	EcosystemPackagist        = "packagist"
 	EcosystemMCP              = "mcp"

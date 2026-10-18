@@ -41,7 +41,7 @@ gh repo clone moritzdagee/bumblebee "/Users/moritzcremer/bumblebee"
 # 4. Build + install from the fork checkout
 cd "/Users/moritzcremer/bumblebee"
 go build -o bumblebee ./cmd/bumblebee  # local binary in the checkout
-go install ./cmd/bumblebee             # -> /Users/moritzcremer/go/bin/bumblebee
+go install ./cmd/bumblebee             # -> /Users/moritzcremer/.go/bin/bumblebee
 
 # 5. Put the command on PATH (see "System change" below)
 
@@ -56,10 +56,10 @@ bumblebee version
 
 ```sh
 # Added 2026-06-05 for Bumblebee (Perplexity supply-chain scanner) — puts go-installed CLIs on PATH
-export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/.go/bin:$PATH"
 ```
 
-- Reason: `go install` places binaries in `~/go/bin`, which was not on PATH.
+- Reason: `go install` places binaries in `~/.go/bin`, which was not on PATH.
 - Backup of the pre-edit file: `~/.zshrc.bak-bumblebee-20260605-203838`
 - Restore: copy that backup back over `~/.zshrc`.
 
@@ -78,7 +78,7 @@ node-ipc credential stealer, nx-console, laravel-lang, shopsprint typosquat).
 No exposure to any catalogued supply-chain compromise was found.
 
 Raw scan output (NDJSON) is **not** in this repo. It lives locally at:
-`/Users/moritzcremer/bumblebee-scan-results/`
+`/Users/moritzcremer/.vibe-suite/bumblebee-scan-results/`
 
 ## Re-running a scan later
 
@@ -132,7 +132,7 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/claude.macbook.bumblebee
 ```sh
 launchctl print gui/$(id -u)/claude.macbook.bumblebee.daily | grep -E 'state|runs|last exit'
 launchctl kickstart -k gui/$(id -u)/claude.macbook.bumblebee.daily   # run now
-tail "/Users/moritzcremer/bumblebee-scan-results/daily/last-run.log"
+tail "/Users/moritzcremer/.vibe-suite/bumblebee-scan-results/daily/last-run.log"
 ```
 
 **Disable the daily job:**
@@ -144,7 +144,7 @@ rm ~/Library/LaunchAgents/claude.macbook.bumblebee.daily.plist
 ## Uninstall
 
 ```sh
-rm /Users/moritzcremer/go/bin/bumblebee          # remove the command
+rm /Users/moritzcremer/.go/bin/bumblebee          # remove the command
 # remove the PATH line from ~/.zshrc (or restore the backup above)
 rm -rf "/Users/moritzcremer/bumblebee"   # remove the source copy
 ```
