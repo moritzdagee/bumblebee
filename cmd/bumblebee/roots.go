@@ -216,7 +216,7 @@ func baselineHomeCandidates(home string) []scanner.Root {
 
 	// Language toolchain / version manager install roots — installed
 	// packages live under these, but a developer's source tree does not.
-	add(filepath.Join(home, ".go"), model.RootKindUserPackage)
+	add(filepath.Join(home, "go"), model.RootKindUserPackage)
 	add(filepath.Join(home, ".cargo"), model.RootKindUserPackage)
 	add(filepath.Join(home, ".rbenv"), model.RootKindUserPackage)
 	add(filepath.Join(home, ".rvm"), model.RootKindUserPackage)

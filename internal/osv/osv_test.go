@@ -48,11 +48,11 @@ func TestMapEcosystem(t *testing.T) {
 	supported := map[string]string{
 		"npm":          "npm",
 		"PyPI":         "pypi",
-		"Go":           ".go",
+		"Go":           "go",
 		"RubyGems":     "rubygems",
 		"Packagist":    "packagist",
 		"VSCode":       "editor-extension",
-		"Go:something": ".go", // suffix after ':' is ignored
+		"Go:something": "go", // suffix after ':' is ignored
 	}
 	for osvEco, want := range supported {
 		got, ok := mapEcosystem(osvEco)

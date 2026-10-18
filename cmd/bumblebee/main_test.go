@@ -99,7 +99,7 @@ func TestResolveRootsBaselineExcludesProjectTrees(t *testing.T) {
 	if err := os.MkdirAll(codeDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	goDir := filepath.Join(home, ".go")
+	goDir := filepath.Join(home, "go")
 	if err := os.MkdirAll(goDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -214,7 +214,7 @@ func TestResolveRootsBaselineSkipsAbsentClaudeCodexRoots(t *testing.T) {
 	// Provide one unrelated default so the baseline run does not fail
 	// with "no default roots". `~/.go` is not one of the MCP candidates
 	// under test, so its presence cannot mask the assertion below.
-	if err := os.MkdirAll(filepath.Join(home, ".go"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(home, "go"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	roots, _, err := resolveRoots(model.ProfileBaseline, nil, rootsOpts{})
@@ -712,7 +712,7 @@ func TestNormalizeProfileRejectsUnknown(t *testing.T) {
 }
 
 func TestParseEcosystemFilter(t *testing.T) {
-	filter, err := parseEcosystemFilter([]string{".go,npm", "browser-extension"})
+	filter, err := parseEcosystemFilter([]string{"go,npm", "browser-extension"})
 	if err != nil {
 		t.Fatalf("parseEcosystemFilter: %v", err)
 	}

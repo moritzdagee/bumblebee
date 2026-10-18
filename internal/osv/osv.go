@@ -211,7 +211,7 @@ type Stats struct {
 var ecosystemMap = map[string]string{
 	"npm":       "npm",
 	"PyPI":      "pypi",
-	"Go":        ".go",
+	"Go":        "go",
 	"RubyGems":  "rubygems",
 	"Packagist": "packagist",
 	"VSCode":    "editor-extension",
