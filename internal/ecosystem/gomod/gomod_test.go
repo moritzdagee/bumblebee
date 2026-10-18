@@ -39,7 +39,7 @@ github.com/example/bar v0.0.0-20240101000000-abcdef/go.mod h1:bar2=
 		if r.SourceType != "go-sum" {
 			t.Errorf("source_type=%q", r.SourceType)
 		}
-		if r.Ecosystem != "go" {
+		if r.Ecosystem != ".go" {
 			t.Errorf("ecosystem=%q", r.Ecosystem)
 		}
 	}

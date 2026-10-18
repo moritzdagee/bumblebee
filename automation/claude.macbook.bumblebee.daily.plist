@@ -35,8 +35,8 @@
     <false/>
 
     <key>StandardOutPath</key>
-    <string>/Users/moritzcremer/bumblebee-scan-results/daily/launchagent.out.log</string>
+    <string>/Users/moritzcremer/.vibe-suite/bumblebee-scan-results/daily/launchagent.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/moritzcremer/bumblebee-scan-results/daily/launchagent.err.log</string>
+    <string>/Users/moritzcremer/.vibe-suite/bumblebee-scan-results/daily/launchagent.err.log</string>
 </dict>
 </plist>

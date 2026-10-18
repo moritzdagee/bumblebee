@@ -55,7 +55,7 @@ go run ./tools/osvcatalog -o threat_intel/osv-npm-malicious.json npm/all.zip
 
 Each input path can be a directory tree, an OSV `all.zip` archive, or a
 single `.json` record. Supported OSV ecosystems map to Bumblebee as:
-`npm`, `PyPI` → `pypi`, `Go` → `go`, `RubyGems` → `rubygems`,
+`npm`, `PyPI` → `pypi`, `Go` → `.go`, `RubyGems` → `rubygems`,
 `Packagist` → `packagist`, `VSCode` → `editor-extension`. Records whose
 ranges declare all versions affected (a single `introduced: "0"` event)
 are emitted with `"versions": ["*"]`; records with only bounded ranges

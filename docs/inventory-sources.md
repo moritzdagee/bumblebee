@@ -8,7 +8,7 @@ by recent supply-chain incidents — see the [Why these ecosystems](#why-these-e
 section at the bottom for the reporting that informed it.
 
 The `ecosystem` field on every record matches OSV ecosystem identifiers
-where one exists (`npm`, `pypi`, `go`, `rubygems`, `packagist`, ...). `mcp`,
+where one exists (`npm`, `pypi`, `.go`, `rubygems`, `packagist`, ...). `mcp`,
 `agent-skill`, and `editor-extension` are project-local values for
 execution surfaces that do not map cleanly to a package registry; all
 three are emitted without resolved package versions.
@@ -29,7 +29,7 @@ Each scan profile reads from a different slice of the sources below:
 
 | Profile     | Sources walked                                                                                                                                                                                                |
 |-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `baseline` | Homebrew `Cellar` / `Caskroom` install metadata and lib prefixes; `/Library/Python`; Linux system Python (`/usr/lib/python*`, plus `/usr/local/lib`); user Python (`~/.local/lib/python*`, `~/.local/share/pipx/venvs`, `pyenv`); language version managers (`asdf`, `nvm`, `rbenv`, `rvm`); `~/.cargo`; `~/go`; editor-extension trees; MCP config locations; agent-skill lock locations (`~/.agents`, `$XDG_STATE_HOME/skills`); per-profile browser-extension trees (Chromium-family + Firefox-family, including common snap/flatpak paths). No project trees.   |
+| `baseline` | Homebrew `Cellar` / `Caskroom` install metadata and lib prefixes; `/Library/Python`; Linux system Python (`/usr/lib/python*`, plus `/usr/local/lib`); user Python (`~/.local/lib/python*`, `~/.local/share/pipx/venvs`, `pyenv`); language version managers (`asdf`, `nvm`, `rbenv`, `rvm`); `~/.cargo`; `~/.go`; editor-extension trees; MCP config locations; agent-skill lock locations (`~/.agents`, `$XDG_STATE_HOME/skills`); per-profile browser-extension trees (Chromium-family + Firefox-family, including common snap/flatpak paths). No project trees.   |
 | `project`   | Configured developer/project roots (`~/code`, `~/src`, `~/Developer`, `~/Projects`, `~/workspace`, and any explicit `--root`). All ecosystem parsers below apply within those trees.                            |
 | `deep`      | Operator-supplied roots, typically a bare home directory during a campaign. Same ecosystem parsers; recommended only in combination with `--exposure-catalog` to emit `record_type=finding` records.            |
 
@@ -212,7 +212,7 @@ Files read:
   `// indirect` trailing comment. Lower confidence than `go.sum` because
   `go.mod` requires may not all be in the final build set.
 
-Baseline includes `~/go` (and therefore `~/go/pkg/mod`, the per-user
+Baseline includes `~/.go` (and therefore `~/.go/pkg/mod`, the per-user
 module cache) when it exists. Each cached module checks in as
 `<mod>@<version>/go.mod`, so on Go-heavy hosts the baseline output can be
 dominated by Go cache records — often tens of thousands of lines. That

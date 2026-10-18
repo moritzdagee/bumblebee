@@ -296,7 +296,7 @@ an explicit `/Users` loop.
 current host (one `<root_kind>\t<path>` line per root). The defaults are:
 
 - `baseline`: language toolchains and version managers (`~/.cargo`,
-  `~/go`, `~/.pyenv/versions`, `~/.nvm/versions`, `~/.rbenv`,
+  `~/.go`, `~/.pyenv/versions`, `~/.nvm/versions`, `~/.rbenv`,
   `~/.asdf/installs`), editor-extension trees (`~/.vscode/extensions`,
   `~/.cursor/extensions`, `~/.windsurf/extensions`, server variants,
   VSCodium), MCP config locations (`~/.cursor`, `~/.codeium/windsurf`,
