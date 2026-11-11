@@ -1,3 +1,16 @@
+## 2026-11-11 go.mod auf go 1.27.4: govulncheck GO-2026-6859 (net/http) beheben (#21)
+
+- Anlass: Tageslauf tests-taeglich-mini vom 11.11.2026 meldete bumblebee rot.
+  govulncheck fand GO-2026-6859 in der Go-Standardbibliothek von go1.27.3
+  (HTTP/1-Server-Absturz durch MaxBytesReader-Header-Race), behoben in go1.27.4.
+- Aenderung: `go 1.27.4` in `go.mod`, `go-version: "1.27.4"` in `ci.yml` (zweimal)
+  und `release.yml`. Zusammengefuehrt als Vorschlag #21 (squash).
+- Pruefung lokal (Mini, GOTOOLCHAIN=auto lädt go1.27.4): `go test ./...` gruen
+  (26 Pakete), `govulncheck ./...` meldet "No vulnerabilities found".
+- Auf dem Mini bleibt der installierte Go-Stand 1.27.3; die Suite laeuft dort mit
+  GOTOOLCHAIN=auto und lädt 1.27.4 bei Bedarf selbst. Auf dem MacBook steht brew
+  bereits auf 1.27.x.
+
 ## 2026-10-15 Go 1.26 statt 1.25: GitHub-Pruefung govulncheck wieder gruen
 
 - Anlass: zwei Fehler-Mails von GitHub zu den Laeufen `ci` vom 15.10.2026 (Vorschlag #14
